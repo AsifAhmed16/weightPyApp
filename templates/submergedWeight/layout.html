@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Weight App</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<div class="container">
+    <br>
+    <br>
+
+    {% if is_post %}
+        <h2>Submerged Weight per Unit Length: OUTPUT </h2>
+        <br>
+        <h4>Calculation Details</h4>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th style="color: saddlebrown">Description</th>
+                <th style="color: saddlebrown">Units</th>
+                <th style="color: saddlebrown">Values</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>Pipe Inside Radius - r1</td>
+                <td>in</td>
+                <td>{{ data.pipe_inside_radious }}</td>
+            </tr>
+            <tr>
+                <td>Pipe Outside Radius - r2</td>
+                <td>in</td>
+                <td>{{ data.pipe_outside_radious }}</td>
+            </tr>
+            <tr>
+                <td>Outer Radius of Coating 1 - r3</td>
+                <td>in</td>
+                <td>{{ data.outer_radious_of_coating }}</td>
+            </tr>
+            <tr>
+                <td style="color: green">Total Pipeline Outside Diameter</td>
+                <td></td>
+                <td style="color: green">{{ data.total_pipeline }}</td>
+            </tr>
+            </tbody>
+        </table>
+        <br>
+        <br>
+
+        <h4>Calculate Dry Unit Weight</h4>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th style="color: saddlebrown">Description</th>
+                <th style="color: saddlebrown">Installation Empty</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>Pipe Weight per Unit Length in Air (lb/ft):</td>
+                <td>{{ data.pipe_weight }}</td>
+            </tr>
+            <tr>
+                <td>Coating 1 Wt. per Unit Length in Air (lb/ft):</td>
+                <td>{{ data.coating_weight }}</td>
+            </tr>
+            <tr>
+                <td>Contents Wt. Per Unit Length in Air (lb/ft):</td>
+                <td>{{ data.contents_weight }}</td>
+            </tr>
+            <tr>
+                <td style="color: green">Total Weight per Unit Length in Air (lb/ft):</td>
+                <td style="color: green">{{ data.total_weight }}</td>
+            </tr>
+            <tr>
+                <td style="color: cadetblue">Buoyant Force per Unit Length (lb/ft):</td>
+                <td style="color: cadetblue">{{ data.buoyant_force }}</td>
+            </tr>
+            </tbody>
+        </table>
+        <br>
+        <br>
+
+        <h4>Summary of Submerged Weight</h4>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th style="color: saddlebrown">Description</th>
+                <th style="color: saddlebrown">Submerged Weight/Unit Length (lb/ft)</th>
+                <th style="color: saddlebrown">Subm. Specific Gravity with respect to S.W.</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td style="color: cadetblue">Installation Empty</td>
+                <td style="text-align: center">{{ data.submergerd_weight }}</td>
+                <td style="text-align: center">{{ data.submergerd_gravity }}</td>
+            </tr>
+            </tbody>
+        </table>
+
+        <br>
+        <br>
+        <a href="{% url 'submergedWeight:layout' %}" class="btn btn-primary">Go Back To Input Form</a>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+
+    {% else %}
+        <h2>Submerged Weight per Unit Length: INPUT </h2>
+        <form action="" class="row s12" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="col-sm-8"><br><h4>Pipe Data</h4></div>
+            <div class="form-group col-sm-6">
+                <label for="usr">Pipe Outside Diameter (OD):</label>
+                <div class="form-inline">
+                    <input type="number" step="0.0001" class="form-control" name="p_od" required> &emsp; <span style="color: blue"> in</span>
+                </div>
+            </div>
+            <div class="form-group col-sm-6">
+                <label for="pwd">Pipe Wall Thickness (t):</label>
+                <div class="form-inline">
+                    <input type="number" step="0.0001" class="form-control" name="p_t" required> &emsp; <span style="color: blue"> in</span>
+                </div>
+            </div>
+            <div class="form-group col-sm-6">
+                <label for="pwd">Pipe Density :</label>
+                <div class="form-inline">
+                    <input type="number" step="0.0001" class="form-control" name="p_d" required> &emsp; <span
+                        style="color: blue"> lb/ft3</span>
+                </div>
+            </div>
+            <div class="form-group col-sm-6">
+                <label for="pwd">Corrosion Allowance :</label>
+                <div class="form-inline">
+                    <input type="number" step="0.0001" class="form-control" name="p_c"> &emsp; <span style="color: blue"> in</span>
+                </div>
+            </div>
+            <div class="col-sm-12">
+                <br>
+                <h4>External Coating Data</h4>
+            </div>
+            <div class="form-group col-sm-3">
+                <label for="usr">Coating Number:</label>
+                <div class="form-inline">
+                    <input type="number" class="form-control" value="1" readonly style="color: blue">
+                </div>
+            </div>
+            <div class="form-group col-sm-3">
+                <label for="usr">Description:</label>
+                <div class="form-inline">
+                    <input type="text" class="form-control" value="FBE" readonly style="color: blue">
+                </div>
+            </div>
+            <div class="form-group col-sm-3">
+                <label for="usr">Thickness (in):</label>
+                <div class="form-inline">
+                    <input type="number" step="0.0001" class="form-control" id="thickness" name="thickness" required>
+                </div>
+            </div>
+            <div class="form-group col-sm-3">
+                <label for="usr">Density (lb/ft3):</label>
+                <div class="form-inline">
+                    <input type="number" step="0.0001" class="form-control" id="density" name="density" required>
+                </div>
+            </div>
+            <div class="col-sm-12">
+                <br>
+                <h4>Pipeline Contents Data</h4></div>
+            <div class="form-group col-sm-4">
+                <label for="usr">Installation Empty: Content(Air)</label>
+                <div class="form-inline">
+                    <input type="number" step="0.0001" class="form-control" name="air" required> &emsp; <span style="color: blue"> Density (lb/ft3)</span>
+                </div>
+            </div>
+            <div class="form-group col-sm-4">
+                <label for="usr">Flooded: Content(Water)</label>
+                <div class="form-inline">
+                    <input type="number" step="0.0001" class="form-control" name="water"> &emsp; <span style="color: blue"> Density (lb/ft3)</span>
+                </div>
+            </div>
+            <div class="form-group col-sm-4">
+                <label for="usr">Hydrotest: Content(Sea Water)</label>
+                <div class="form-inline">
+                    <input type="number" step="0.0001" class="form-control" name="sea_water" required> &emsp; <span style="color: blue"> Density (lb/ft3)</span>
+                </div>
+            </div>
+            <div class="form-group col-sm-4"><br>
+                <button type="submit" class="btn btn-primary">Submit</button>
+                <br>
+                <br>
+                <br>
+            </div>
+        </form>
+    {% endif %}
+
+</div>
+
+</body>
+</html>
